@@ -32,7 +32,25 @@ const registrarEntrada = async ({ id_produto, quantidade, data_compra, id_usuari
   return result.rows[0];
 };
 
+const editarMovimentacao = async ({ id, quantidade, data_compra, id_usuario }) => {
+  const result = await pool.query(
+    `UPDATE controle_estoque SET quantidade = $1, data_compra = $2, id_usuario = $3, atualizado_em = NOW() WHERE id = $4 AND deletado = false RETURNING *`,
+    [quantidade, data_compra, id_usuario, id]
+  );
+  return result.rows[0];
+};
+
+const excluirMovimentacao = async (id) => {
+  const result = await pool.query(
+    `UPDATE controle_estoque SET deletado = true WHERE id = $1 RETURNING id`,
+    [id]
+  );
+  return result.rows.length > 0;
+};
+
 module.exports = {
   listarEntradasPorProduto,
-  registrarEntrada
+  registrarEntrada,
+  editarMovimentacao,
+  excluirMovimentacao
 };

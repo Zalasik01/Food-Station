@@ -5,11 +5,11 @@ const produtoModel = require('../models/produto');
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { nome, valor, quantidade_estoque, ativo } = req.body;
+    const { nome, valor, quantidade_estoque, estoque_minimo, ativo } = req.body;
     if (!nome || valor == null || quantidade_estoque == null) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, valor, quantidade_estoque.' });
     }
-    const produtoAtualizado = await produtoModel.editarProduto({ id, nome, valor, quantidade_estoque, ativo });
+    const produtoAtualizado = await produtoModel.editarProduto({ id, nome, valor, quantidade_estoque, estoque_minimo, ativo });
     if (!produtoAtualizado) {
       return res.status(404).json({ error: 'Produto não encontrado.' });
     }
@@ -43,11 +43,11 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { nome, valor, quantidade_estoque } = req.body;
+    const { nome, valor, quantidade_estoque, estoque_minimo } = req.body;
     if (!nome || valor == null || quantidade_estoque == null) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, valor, quantidade_estoque.' });
     }
-    const novoProduto = await produtoModel.criarProduto({ nome, valor, quantidade_estoque });
+    const novoProduto = await produtoModel.criarProduto({ nome, valor, quantidade_estoque, estoque_minimo });
     res.status(201).json(novoProduto);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao cadastrar produto.' });

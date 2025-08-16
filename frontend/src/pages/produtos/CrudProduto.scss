@@ -1,3 +1,123 @@
+.crud-produto__toast button {
+  background: none;
+  border: none;
+  color: #374151;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+// ...existing code...
+.crud-produto__toast button:hover {
+  color: #ef4444;
+}
+.crud-produto__toast {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  min-width: 280px;
+  max-width: 90vw;
+  width: auto;
+  padding: 0.85rem 2rem;
+  font-size: 1.08rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: all 0.3s ease;
+  word-break: break-word;
+  border: 2px solid;
+  background: #fff;
+  color: #374151;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .crud-produto__toast {
+    min-width: 200px;
+    max-width: 95vw;
+    font-size: 0.98rem;
+    padding: 0.7rem 1.2rem;
+    right: 1rem;
+    top: 1rem;
+    border-radius: 8px;
+    gap: 0.8rem;
+  }
+}
+}
+.crud-produto__toast--sucesso {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #065f46;
+}
+.crud-produto__toast--erro {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #991b1b;
+}
+.crud-produto__toast--confirm {
+  border-color: #3b82f6;
+  background: #e0e7ff;
+  color: #1e40af;
+}
+.crud-produto__toast--confirm button {
+  margin-left: 0.5rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.crud-produto__toast--confirm button:hover {
+  background: #2563eb;
+  color: #fff;
+}
+// Botões de movimentação estoque
+.crud-produto__btn-estoque-edit {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+  &:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  }
+}
+.crud-produto__btn-estoque-delete {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.08);
+  &:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  }
+}
 @keyframes skeleton {
   0% { opacity: 0.5; }
   100% { opacity: 1; }

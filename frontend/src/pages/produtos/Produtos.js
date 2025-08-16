@@ -155,7 +155,23 @@ const Produtos = () => {
                       }}
                     >
                       <td>{produto.id}</td>
-                      <td>{produto.nome}</td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          {produto.nome}
+                          {produto.quantidade_estoque <= (produto.estoque_minimo || 10) && (
+                            <span 
+                              title={`Estoque baixo! Atual: ${produto.quantidade_estoque}, Mínimo: ${produto.estoque_minimo || 10}`}
+                              style={{ 
+                                color: '#ff9800', 
+                                fontSize: '18px',
+                                fontWeight: 'bold'
+                              }}
+                            >
+                              ⚠️
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td>{produto.valor ? `R$ ${Number(String(produto.valor).replace(',','.')).toFixed(2)}` : '-'}</td>
                       <td>{produto.quantidade_estoque ?? '-'}</td>
                       <td>

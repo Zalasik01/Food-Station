@@ -1,20 +1,27 @@
+
 import React, { useState, useEffect } from 'react';
 
-const ControleEstoqueModal = ({ open, onClose, onSave, idProduto }) => {
+const ControleEstoqueModal = ({ open, onClose, onSave, idProduto, editMovimentacao, atualizarMovimentacaoLocal, adicionarMovimentacaoLocal }) => {
   const [quantidade, setQuantidade] = useState('');
   const [dataCompra, setDataCompra] = useState('');
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState('');
 
-  // Definir data atual quando o modal abrir
+  // Preencher campos se for edição
   useEffect(() => {
     if (open) {
-      const hoje = new Date().toISOString().split('T')[0];
-      setDataCompra(hoje);
-      setQuantidade('');
-      setMsg('');
+      if (editMovimentacao) {
+        setQuantidade(editMovimentacao.quantidade);
+        setDataCompra(editMovimentacao.data_compra ? editMovimentacao.data_compra.split('T')[0] : '');
+        setMsg('');
+      } else {
+        const hoje = new Date().toISOString().split('T')[0];
+        setDataCompra(hoje);
+        setQuantidade('');
+        setMsg('');
+      }
     }
-  }, [open]);
+  }, [open, editMovimentacao]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -32,26 +39,44 @@ const ControleEstoqueModal = ({ open, onClose, onSave, idProduto }) => {
       }
 
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-      const res = await fetch(`${apiUrl}/controle-estoque`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_produto: idProduto,
-          quantidade: parseInt(quantidade),
-          data_compra: dataCompra,
-          id_usuario: idUsuario
-        })
-      });
-      if (res.ok) {
-        setMsg('Entrada registrada com sucesso!');
-        setQuantidade('');
-        onSave && onSave();
-        setTimeout(onClose, 1200);
+      let res;
+      if (editMovimentacao) {
+        // Atualizar movimentação
+        res = await fetch(`${apiUrl}/controle-estoque/${editMovimentacao.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            quantidade: parseInt(quantidade),
+            data_compra: dataCompra,
+            id_usuario: idUsuario
+          })
+        });
       } else {
-        setMsg('Erro ao registrar entrada.');
+        // Nova movimentação
+        res = await fetch(`${apiUrl}/controle-estoque`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id_produto: idProduto,
+            quantidade: parseInt(quantidade),
+            data_compra: dataCompra,
+            id_usuario: idUsuario
+          })
+        });
+      }
+      if (res.ok) {
+        const mov = await res.json();
+        setMsg(editMovimentacao ? 'Movimentação atualizada!' : 'Entrada registrada com sucesso!');
+        if (editMovimentacao && atualizarMovimentacaoLocal) atualizarMovimentacaoLocal(mov);
+        if (!editMovimentacao && adicionarMovimentacaoLocal) adicionarMovimentacaoLocal(mov);
+        setTimeout(() => {
+          onSave && onSave();
+        }, 1200);
+      } else {
+        setMsg('Erro ao salvar movimentação.');
       }
     } catch {
-      setMsg('Erro ao registrar entrada.');
+      setMsg('Erro ao salvar movimentação.');
     }
     setLoading(false);
   };
@@ -60,7 +85,7 @@ const ControleEstoqueModal = ({ open, onClose, onSave, idProduto }) => {
   return (
     <div className="controle-estoque-modal__backdrop">
       <div className="controle-estoque-modal__container">
-        <h2>Registrar Entrada de Mercadoria</h2>
+        <h2>{editMovimentacao ? 'Editar Movimentação' : 'Registrar Entrada de Mercadoria'}</h2>
         <form onSubmit={handleSubmit} className="controle-estoque-modal__form">
           <label>Data da Compra</label>
           <input type="date" value={dataCompra} onChange={e => setDataCompra(e.target.value)} required />
@@ -68,7 +93,7 @@ const ControleEstoqueModal = ({ open, onClose, onSave, idProduto }) => {
           <input type="number" min="1" value={quantidade} onChange={e => setQuantidade(e.target.value)} required />
           <div className="controle-estoque-modal__actions">
             <button type="button" onClick={onClose} disabled={loading}>Cancelar</button>
-            <button type="submit" disabled={loading}>{loading ? 'Salvando...' : 'Registrar'}</button>
+            <button type="submit" disabled={loading}>{loading ? 'Salvando...' : (editMovimentacao ? 'Atualizar' : 'Registrar')}</button>
           </div>
         </form>
         {msg && <div className="controle-estoque-modal__msg">{msg}</div>}

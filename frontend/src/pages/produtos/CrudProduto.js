@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Menu from '../../components/Menu/Menu';
@@ -6,6 +7,25 @@ import { useNavigate } from 'react-router-dom';
 import UsuarioDropdown from '../../components/UsuarioDropdown/UsuarioDropdown';
 import ControleEstoqueModal from '../../components/ControleEstoqueModal';
 import '../../components/ControleEstoqueModal.scss';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Toast para feedback visual
+const showToast = (message, type) => {
+  switch (type) {
+    case 'sucesso':
+      toast.success(message);
+      break;
+    case 'erro':
+      toast.error(message);
+      break;
+    case 'info':
+      toast.info(message);
+      break;
+    default:
+      toast(message);
+  }
+};
 
 const CrudProduto = () => {
   const { id } = useParams();
@@ -14,12 +34,32 @@ const CrudProduto = () => {
   const nomeUsuario = usuario.nome || 'Usuário';
   const isAdmin = usuario.administrador === true || usuario.administrador === "true";
 
-  const [form, setForm] = useState({ nome: '', preco: '', quantidade_estoque: '', ativo: true });
+  const [form, setForm] = useState({ nome: '', preco: '', quantidade_estoque: '', estoque_minimo: '10', ativo: true });
+  const [originalForm, setOriginalForm] = useState(null);
   const [editMode, setEditMode] = useState(!!id);
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [estoqueModalOpen, setEstoqueModalOpen] = useState(false);
   const [entradasEstoque, setEntradasEstoque] = useState([]);
+  const [editMovimentacao, setEditMovimentacao] = useState(null);
+
+  // Excluir movimentação de estoque
+  const handleExcluirMovimentacao = async (idMovimentacao) => {
+    try {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const res = await fetch(`${apiUrl}/controle-estoque/${idMovimentacao}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        showToast('Movimentação excluída com sucesso!', 'sucesso');
+        setEntradasEstoque(entradasEstoque.filter(e => e.id !== idMovimentacao));
+      } else {
+        showToast('Erro ao excluir movimentação.', 'erro');
+      }
+    } catch {
+      showToast('Erro ao excluir movimentação.', 'erro');
+    }
+  };
 
   const formatCurrency = (value) => {
     if (!value) return '';
@@ -55,12 +95,15 @@ const CrudProduto = () => {
           const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
           const res = await fetch(`${apiUrl}/produtos/${id}`);
           const data = await res.json();
-          setForm({
+          const produtoForm = {
             nome: data.nome || '',
             preco: data.valor !== undefined && data.valor !== null ? formatCurrency((data.valor * 100).toString()) : '',
             quantidade_estoque: data.quantidade_estoque !== undefined && data.quantidade_estoque !== null ? String(data.quantidade_estoque) : '',
+            estoque_minimo: data.estoque_minimo !== undefined && data.estoque_minimo !== null ? String(data.estoque_minimo) : '10',
             ativo: data.ativo === undefined ? true : (data.ativo === true || data.ativo === 'true')
-          });
+          };
+          setForm(produtoForm);
+          setOriginalForm(produtoForm);
         } catch {
           setMsg('Erro ao carregar produto.');
         }
@@ -90,6 +133,27 @@ const CrudProduto = () => {
     e.preventDefault();
     setLoading(true);
     setMsg('');
+    // Validação: só atualiza se houve alteração
+    if (id && originalForm) {
+      const atual = {
+        nome: form.nome,
+        preco: form.preco,
+        quantidade_estoque: form.quantidade_estoque,
+        ativo: !!form.ativo
+      };
+      const original = {
+        nome: originalForm.nome,
+        preco: originalForm.preco,
+        quantidade_estoque: originalForm.quantidade_estoque,
+        ativo: !!originalForm.ativo
+      };
+      const alterado = Object.keys(atual).some(k => atual[k] !== original[k]);
+      if (!alterado) {
+        setLoading(false);
+        showToast('Nenhuma alteração detectada.', 'erro');
+        return;
+      }
+    }
     try {
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
       const url = id ? `${apiUrl}/produtos/${id}` : `${apiUrl}/produtos`;
@@ -101,20 +165,21 @@ const CrudProduto = () => {
           nome: form.nome,
           valor: parseFloat(parseCurrency(form.preco)),
           quantidade_estoque: parseInt(form.quantidade_estoque),
+          estoque_minimo: parseInt(form.estoque_minimo),
           ativo: !!form.ativo
         })
       });
       if (res.ok) {
-        setMsg(id ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!');
-        if (!id) setForm({ nome: '', preco: '', quantidade_estoque: '', ativo: true });
+        showToast(id ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!', 'sucesso');
+        if (!id) setForm({ nome: '', preco: '', quantidade_estoque: '', estoque_minimo: '10', ativo: true });
         setTimeout(() => {
           navigate('/produtos');
         }, 1500);
       } else {
-        setMsg('Erro ao salvar produto.');
+        showToast('Erro ao salvar produto.', 'erro');
       }
     } catch {
-      setMsg('Erro ao salvar produto.');
+      showToast('Erro ao salvar produto.', 'erro');
     }
     setLoading(false);
   };
@@ -217,6 +282,21 @@ const CrudProduto = () => {
                     className="crud-produto__input"
                   />
                 </div>
+
+                <div className="crud-produto__field">
+                  <label htmlFor="estoque_minimo" className="crud-produto__label">Estoque Mínimo</label>
+                  <input 
+                    type="number" 
+                    name="estoque_minimo" 
+                    id="estoque_minimo" 
+                    value={form.estoque_minimo} 
+                    onChange={handleChange} 
+                    required 
+                    min="1" 
+                    placeholder="Ex: 10" 
+                    className="crud-produto__input"
+                  />
+                </div>
               </div>
 
               <div className="crud-produto__actions">
@@ -242,7 +322,10 @@ const CrudProduto = () => {
           {/* Bloco Controle de Estoque */}
           <div className="crud-produto__card">
             <h3 className="crud-produto__bloco-titulo">Controle de Estoque</h3>
-            <button className="crud-produto__btn-registrar" onClick={() => setEstoqueModalOpen(true)}>
+            <button className="crud-produto__btn-registrar" onClick={() => {
+              setEditMovimentacao(null);
+              setEstoqueModalOpen(true);
+            }}>
               Registrar produto
             </button>
             <table className="crud-produto__estoque-tabela">
@@ -251,6 +334,7 @@ const CrudProduto = () => {
                   <th>Data</th>
                   <th>Quantidade</th>
                   <th>Usuário</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -265,7 +349,10 @@ const CrudProduto = () => {
                       <td>
                         <button 
                           className="crud-produto__btn-estoque-edit" 
-                          onClick={() => setEstoqueModalOpen({ open: true, edit: true, movimentacao: e })}
+                          onClick={() => {
+                            setEditMovimentacao(e);
+                            setEstoqueModalOpen(true);
+                          }}
                         >Editar</button>
                         <button 
                           className="crud-produto__btn-estoque-delete" 
@@ -279,20 +366,41 @@ const CrudProduto = () => {
             </table>
             <ControleEstoqueModal
               open={estoqueModalOpen}
-              onClose={() => setEstoqueModalOpen(false)}
-              onSave={() => setEstoqueModalOpen(false)}
+              onClose={() => {
+                setEstoqueModalOpen(false);
+                setEditMovimentacao(null);
+              }}
+              onSave={() => {
+                setEstoqueModalOpen(false);
+                setEditMovimentacao(null);
+              }}
               idProduto={id}
+              editMovimentacao={editMovimentacao}
+              atualizarMovimentacaoLocal={mov => {
+                setEntradasEstoque(entradasEstoque.map(e => e.id === mov.id ? mov : e));
+              }}
+              adicionarMovimentacaoLocal={mov => {
+                setEntradasEstoque([mov, ...entradasEstoque]);
+              }}
             />
           </div>
           </div>
         )}
 
-        {msg && (
-          <div className={`crud-produto__msg ${msg.includes('sucesso') ? 'crud-produto__msg--sucesso' : 'crud-produto__msg--erro'}`}>
-            {msg}
-          </div>
-        )}
       </main>
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

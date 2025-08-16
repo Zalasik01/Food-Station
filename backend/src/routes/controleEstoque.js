@@ -27,4 +27,38 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Editar movimentação de estoque
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantidade, data_compra, id_usuario } = req.body;
+    if (!quantidade || !data_compra || !id_usuario) {
+      return res.status(400).json({ error: 'Campos obrigatórios: quantidade, data_compra, id_usuario.' });
+    }
+    const movimentacao = await controleEstoqueModel.editarMovimentacao({ id, quantidade, data_compra, id_usuario });
+    if (movimentacao) {
+      res.status(200).json(movimentacao);
+    } else {
+      res.status(404).json({ error: 'Movimentação não encontrada.' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao editar movimentação.' });
+  }
+});
+
+// Excluir movimentação de estoque (lógica)
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await controleEstoqueModel.excluirMovimentacao(id);
+    if (result) {
+      res.status(200).json({ success: true });
+    } else {
+      res.status(404).json({ error: 'Movimentação não encontrada.' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao excluir movimentação.' });
+  }
+});
+
 module.exports = router;

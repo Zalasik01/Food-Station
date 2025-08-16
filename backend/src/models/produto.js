@@ -16,23 +16,23 @@ const listarProdutos = async () => {
   return result.rows;
 };
 
-const criarProduto = async ({ nome, valor, quantidade_estoque }) => {
+const criarProduto = async ({ nome, valor, quantidade_estoque, estoque_minimo = 10 }) => {
   const result = await pool.query(
-    `INSERT INTO produto (uuid, nome, valor, quantidade_estoque, ativo, deletado) VALUES (gen_random_uuid(), $1, $2, $3, true, false) RETURNING *`,
-    [nome, valor, quantidade_estoque]
+    `INSERT INTO produto (uuid, nome, valor, quantidade_estoque, estoque_minimo, ativo, deletado) VALUES (gen_random_uuid(), $1, $2, $3, $4, true, false) RETURNING *`,
+    [nome, valor, quantidade_estoque, estoque_minimo]
   );
   return result.rows[0];
 };
 
 const buscarProdutoPorId = async (id) => {
-  const result = await pool.query('SELECT id, nome, valor, quantidade_estoque, ativo FROM produto WHERE id = $1 AND deletado = false', [id]);
+  const result = await pool.query('SELECT id, nome, valor, quantidade_estoque, estoque_minimo, ativo FROM produto WHERE id = $1 AND deletado = false', [id]);
   return result.rows[0];
 };
 
-const editarProduto = async ({ id, nome, valor, quantidade_estoque, ativo }) => {
+const editarProduto = async ({ id, nome, valor, quantidade_estoque, estoque_minimo, ativo }) => {
   const result = await pool.query(
-    `UPDATE produto SET nome = $1, valor = $2, quantidade_estoque = $3, ativo = $4 WHERE id = $5 AND deletado = false RETURNING *`,
-    [nome, valor, quantidade_estoque, ativo, id]
+    `UPDATE produto SET nome = $1, valor = $2, quantidade_estoque = $3, estoque_minimo = $4, ativo = $5 WHERE id = $6 AND deletado = false RETURNING *`,
+    [nome, valor, quantidade_estoque, estoque_minimo, ativo, id]
   );
   return result.rows[0];
 };
