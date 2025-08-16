@@ -1,3 +1,7 @@
+@keyframes skeleton {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
  .produtos__top-bar {
    width: 80%;
    margin: 0 auto 5px auto;
@@ -101,4 +105,10 @@
 .produtos__conteudo p {
   font-size: 1.1rem;
   color: var(--cor-texto);
+}
+.produtos__linha-inativa {
+  background: #fee2e2 !important;
+}
+.produtos__tabela tr.produtos__linha-inativa:hover {
+  background: #fecaca !important;
 }

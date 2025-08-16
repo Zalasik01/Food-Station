@@ -5,6 +5,7 @@ const config = require('./config');
 const loginRouter = require('./routes/login');
 const validateTokenRouter = require('./routes/validateToken');
 const produtosRouter = require('./routes/produtos');
+const controleEstoqueRouter = require('./routes/controleEstoque');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/login', loginRouter);
 app.use('/api/validate-token', validateTokenRouter);
 app.use('/api/produtos', produtosRouter);
+app.use('/api/controle-estoque', controleEstoqueRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API rodando!' });

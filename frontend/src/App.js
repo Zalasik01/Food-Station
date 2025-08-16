@@ -25,6 +25,7 @@ const App = () => {
       <Route path="/gestao" element={<PrivateRoute><Gestao /></PrivateRoute>} />
       <Route path="/produtos" element={<PrivateRoute><Produtos /></PrivateRoute>} />
       <Route path="/novo-produto" element={<PrivateRoute><CrudProduto /></PrivateRoute>} />
+      <Route path="/editar-produto/:id" element={<PrivateRoute><CrudProduto /></PrivateRoute>} />
     </Routes>
   );
 };
