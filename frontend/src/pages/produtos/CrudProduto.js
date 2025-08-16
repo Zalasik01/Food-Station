@@ -418,48 +418,50 @@ const CrudProduto = () => {
             </div>
           )}
 
-          {/* Bloco Controle de Estoque */}
-          <div className="crud-produto__card">
-            <h3 className="crud-produto__bloco-titulo">Controle de Estoque</h3>
-            <table className="crud-produto__estoque-tabela">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Antes</th>
-                  <th>Depois</th>
-                  <th>Adicionado</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {entradasEstoque.length === 0 ? (
-                  <tr><td colSpan={5}>Nenhuma movimentação registrada.</td></tr>
-                ) : (
-                  entradasEstoque.map(e => (
-                    <tr key={e.id}>
-                      <td>{e.data_compra ? new Date(e.data_compra).toLocaleDateString() : '-'}</td>
-                      <td>{e.quantidade_antes || 0}</td>
-                      <td>{e.quantidade_depois || 0}</td>
-                      <td>{e.quantidade_adicionada || e.quantidade || 0}</td>
-                      <td>
-                        <button 
-                          className="crud-produto__btn-estoque-edit" 
-                          onClick={() => {
-                            setEditMovimentacao(e);
-                            setEstoqueModalOpen(true);
-                          }}
-                        >Editar</button>
-                        <button 
-                          className="crud-produto__btn-estoque-delete" 
-                          onClick={() => handleExcluirMovimentacao(e.id)}
-                        >Excluir</button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          {/* Bloco Controle de Estoque - Apenas no modo edição */}
+          {editMode && (
+            <div className="crud-produto__card">
+              <h3 className="crud-produto__bloco-titulo">Controle de Estoque</h3>
+              <table className="crud-produto__estoque-tabela">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Antes</th>
+                    <th>Depois</th>
+                    <th>Adicionado</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entradasEstoque.length === 0 ? (
+                    <tr><td colSpan={5}>Nenhuma movimentação registrada.</td></tr>
+                  ) : (
+                    entradasEstoque.map(e => (
+                      <tr key={e.id}>
+                        <td>{e.data_compra ? new Date(e.data_compra).toLocaleDateString() : '-'}</td>
+                        <td>{e.quantidade_antes || 0}</td>
+                        <td>{e.quantidade_depois || 0}</td>
+                        <td>{e.quantidade_adicionada || e.quantidade || 0}</td>
+                        <td>
+                          <button 
+                            className="crud-produto__btn-estoque-edit" 
+                            onClick={() => {
+                              setEditMovimentacao(e);
+                              setEstoqueModalOpen(true);
+                            }}
+                          >Editar</button>
+                          <button 
+                            className="crud-produto__btn-estoque-delete" 
+                            onClick={() => handleExcluirMovimentacao(e.id)}
+                          >Excluir</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
           </div>
         )}
 
