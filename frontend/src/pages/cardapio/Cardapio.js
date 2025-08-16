@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import Menu from '../../components/Menu/Menu';
 import './cardapio.scss';
 
 const Cardapio = () => {
+  const usuario = JSON.parse(localStorage.getItem('usuario')) || {};
+  const isAdmin = usuario.administrador === true || usuario.administrador === "true";
   const [cardapioSemanal, setCardapioSemanal] = useState({
     'segunda': {
       cafeManha: 'Pão francês, manteiga, café, leite',
@@ -55,6 +58,9 @@ const Cardapio = () => {
 
   return (
     <div className="cardapio">
+      <header className="cardapio__menu">
+        <Menu isAdmin={isAdmin} />
+      </header>
       <div className="cardapio__cabecalho">
         <div>
           <h1 className="cardapio__titulo">Cardápio Semanal</h1>

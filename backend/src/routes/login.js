@@ -56,7 +56,8 @@ router.post('/', async (req, res) => {
         uuid: usuario.uuid,
         nome: usuario.nome,
         email: usuario.email,
-        situacao: usuario.situacao
+        situacao: usuario.situacao,
+        administrador: usuario.administrador
       }
     });
 

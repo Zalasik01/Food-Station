@@ -3,6 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const loginRouter = require('./routes/login');
+const validateTokenRouter = require('./routes/validateToken');
+const produtosRouter = require('./routes/produtos');
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Rotas
 app.use('/api/login', loginRouter);
+app.use('/api/validate-token', validateTokenRouter);
+app.use('/api/produtos', produtosRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API rodando!' });

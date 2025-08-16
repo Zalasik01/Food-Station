@@ -1,63 +1,41 @@
-.dashboard {
+.administracao {
   min-height: 100vh;
   background: var(--cor-fundo);
   display: flex;
   flex-direction: column;
 }
-
-.dashboard__menu {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 1.5rem 0;
-  display: flex;
-  justify-content: center;
-}
-
-.dashboard__menu-list {
-  display: flex;
-  gap: 2.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--cor-primaria);
-}
-
-.dashboard__conteudo {
+.administracao__conteudo {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 3rem 1rem;
 }
-
-.dashboard__conteudo h1 {
-  font-size: 2.2rem;
-  color: var(--cor-primaria);
-  margin-bottom: 1rem;
-}
-
-.dashboard__conteudo p {
+.administracao__botao {
+  background: var(--cor-primaria);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
   font-size: 1.1rem;
-  color: var(--cor-texto);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 2rem;
 }
-
 .admin-dropdown-trigger {
-  background: none;
-  color: var(--cor-primaria);
+  background: var(--cor-primaria);
+  color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 0;
-  font-size: 1.15rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-
 .admin-dropdown-menu {
   position: absolute;
   top: 110%;
@@ -71,7 +49,6 @@
   display: flex;
   flex-direction: column;
 }
-
 .admin-dropdown-menu button {
   background: none;
   border: none;
@@ -84,7 +61,6 @@
   border-radius: 0;
   transition: background 0.2s;
 }
-
 .admin-dropdown-menu button:hover {
   background: var(--cor-borda);
 }

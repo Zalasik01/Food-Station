@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './login.scss';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,9 @@ const Login = () => {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const navigate = useNavigate();
+
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -27,7 +31,7 @@ const Login = () => {
     setErro('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,12 +45,9 @@ const Login = () => {
       const data = await response.json();
 
       if (data.sucesso) {
-        // Login bem-sucedido - salvar token e redirecionar
         localStorage.setItem('token', data.token);
         localStorage.setItem('usuario', JSON.stringify(data.usuario));
-        console.log('Login realizado com sucesso!', data.usuario);
-        // Aqui você pode redirecionar para o painel de controle
-        // window.location.href = '/painel-controle';
+        navigate('/');
       } else {
         setErro(data.mensagem || 'Erro ao fazer login');
       }

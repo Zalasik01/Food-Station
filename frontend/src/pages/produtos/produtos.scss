@@ -1,0 +1,104 @@
+ .produtos__top-bar {
+   width: 80%;
+   margin: 0 auto 5px auto;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+ }
+ .produtos__search {
+   width: 250px;
+   padding: 0.7rem 1rem;
+   border: 1px solid var(--cor-borda);
+   border-radius: 6px;
+   font-size: 1rem;
+   margin-right: 1rem;
+ }
+ .produtos__th-sortable {
+   cursor: pointer;
+   user-select: none;
+ }
+ .produtos__edit-btn {
+   background: none;
+   border: none;
+   cursor: pointer;
+   padding: 0.2rem;
+   border-radius: 4px;
+   transition: background 0.2s;
+   display: flex;
+   align-items: center;
+ }
+ .produtos__edit-btn:hover {
+   background: var(--cor-borda);
+ }
+ .produtos__novo-container {
+   width: 80%;
+   margin: 0 auto 5px auto;
+   display: flex;
+   justify-content: flex-end;
+ }
+ .produtos__novo {
+   background: var(--cor-primaria);
+   color: #fff;
+   border: none;
+   border-radius: 6px;
+   padding: 0.7rem 1.5rem;
+   font-size: 1rem;
+   font-weight: 500;
+   cursor: pointer;
+   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+   transition: background 0.2s;
+ }
+ .produtos__novo:hover {
+   background: var(--cor-primaria-hover, #0056b3);
+ }
+ .produtos__tabela-container {
+   width: 80%;
+   margin: 0 auto;
+   overflow-x: auto;
+ }
+ .produtos__tabela {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 2rem;
+   background: #fff;
+   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+ }
+ .produtos__tabela th, .produtos__tabela td {
+   border: 1px solid var(--cor-borda);
+   padding: 0.7rem 1rem;
+   text-align: left;
+ }
+ .produtos__tabela th {
+   background: var(--cor-borda);
+   color: var(--cor-primaria);
+   font-weight: 600;
+ }
+ .produtos__tabela tr:nth-child(even) {
+   background: #f9f9f9;
+ }
+ .produtos__tabela tr:hover {
+   background: #e6f7ff;
+ }
+.produtos {
+  min-height: 100vh;
+  background: var(--cor-fundo);
+  display: flex;
+  flex-direction: column;
+}
+.produtos__conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3rem 1rem;
+}
+.produtos__conteudo h2 {
+  font-size: 2rem;
+  color: var(--cor-primaria);
+  margin-bottom: 1rem;
+}
+.produtos__conteudo p {
+  font-size: 1.1rem;
+  color: var(--cor-texto);
+}

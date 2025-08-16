@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import Menu from '../../components/Menu/Menu';
 import './relatorios.scss';
 
 const Relatorios = () => {
+  const usuario = JSON.parse(localStorage.getItem('usuario')) || {};
+  const isAdmin = usuario.administrador === true || usuario.administrador === "true";
   const [filtros, setFiltros] = useState({
     dataInicio: '2025-08-01',
     dataFim: '2025-08-15',
@@ -19,6 +22,9 @@ const Relatorios = () => {
 
   return (
     <div className="relatorios">
+      <header className="relatorios__menu">
+        <Menu isAdmin={isAdmin} />
+      </header>
       <div className="relatorios__cabecalho">
         <h1 className="relatorios__titulo">Relatórios</h1>
         <button className="relatorios__botaoExportar">
