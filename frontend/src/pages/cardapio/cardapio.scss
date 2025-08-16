@@ -1,0 +1,251 @@
+// Estilos da página Cardápio
+.cardapio {
+  padding: 2rem;
+  
+  &__cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+  
+  &__titulo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+    margin-bottom: 0.5rem;
+  }
+  
+  &__semana {
+    color: var(--cor-texto-secundario);
+    font-size: 1rem;
+  }
+  
+  &__acoes {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  &__botaoEdicao {
+    background: var(--cor-info);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+    
+    &:hover {
+      background: var(--cor-info-escura);
+    }
+    
+    &.ativo {
+      background: var(--cor-sucesso);
+      
+      &:hover {
+        background: var(--cor-sucesso-escura);
+      }
+    }
+  }
+  
+  &__botaoImprimir {
+    background: var(--cor-secundaria);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    
+    &:hover {
+      background: var(--cor-secundaria-escura);
+    }
+  }
+  
+  &__navegacao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &__botaoSemana {
+    background: var(--cor-primaria);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+      background: var(--cor-primaria-escura);
+    }
+  }
+  
+  &__indicadorSemana {
+    font-weight: 600;
+    color: var(--cor-primaria);
+    font-size: 1.1rem;
+  }
+  
+  &__grade {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  
+  &__cabecalhoGrade {
+    display: grid;
+    grid-template-columns: 150px repeat(5, 1fr);
+    background: var(--cor-primaria);
+    color: white;
+  }
+  
+  &__celulaTipo,
+  &__celulaDia {
+    padding: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  &__linhaRefeicao {
+    display: grid;
+    grid-template-columns: 150px repeat(5, 1fr);
+    border-bottom: 1px solid var(--cor-borda);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  &__tipoRefeicao {
+    background: var(--cor-fundo-secundario);
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--cor-borda);
+  }
+  
+  &__itemCardapio {
+    padding: 1rem;
+    border-right: 1px solid var(--cor-borda);
+    
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  &__textarea {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+    }
+  }
+  
+  &__textoItem {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--cor-texto);
+    margin: 0;
+    min-height: 60px;
+  }
+  
+  &__observacoes {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    
+    h3 {
+      color: var(--cor-primaria);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      
+      li {
+        margin-bottom: 0.5rem;
+        color: var(--cor-texto-secundario);
+        line-height: 1.4;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  
+  // Responsividade
+  @media (max-width: 1024px) {
+    &__cabecalhoGrade,
+    &__linhaRefeicao {
+      grid-template-columns: 120px repeat(5, 1fr);
+    }
+    
+    &__tipoRefeicao {
+      font-size: 0.875rem;
+    }
+    
+    &__textoItem,
+    &__textarea {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+    
+    &__cabecalho {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    
+    &__acoes {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    &__navegacao {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    &__grade {
+      overflow-x: auto;
+    }
+    
+    &__cabecalhoGrade,
+    &__linhaRefeicao {
+      min-width: 800px;
+      grid-template-columns: 100px repeat(5, 140px);
+    }
+  }
+}

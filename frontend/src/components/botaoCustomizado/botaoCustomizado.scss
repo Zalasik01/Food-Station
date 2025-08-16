@@ -1,0 +1,212 @@
+// Componente Botão Customizado
+.botaoCustomizado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--cor-primaria-rgb), 0.2);
+  }
+  
+  // Tamanhos
+  &--pequeno {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    min-height: 32px;
+  }
+  
+  &--medio {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    min-height: 38px;
+  }
+  
+  &--grande {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+  
+  // Tipos - Variante Sólida
+  &--primario.botaoCustomizado--solido {
+    background: var(--cor-primaria);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-primaria-escura);
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  &--secundario.botaoCustomizado--solido {
+    background: var(--cor-secundaria);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-secundaria-escura);
+      transform: translateY(-1px);
+    }
+  }
+  
+  &--sucesso.botaoCustomizado--solido {
+    background: var(--cor-sucesso);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-sucesso-escura);
+      transform: translateY(-1px);
+    }
+  }
+  
+  &--erro.botaoCustomizado--solido {
+    background: var(--cor-erro);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-erro-escura);
+      transform: translateY(-1px);
+    }
+  }
+  
+  &--alerta.botaoCustomizado--solido {
+    background: var(--cor-alerta);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-alerta-escura);
+      transform: translateY(-1px);
+    }
+  }
+  
+  &--info.botaoCustomizado--solido {
+    background: var(--cor-info);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-info-escura);
+      transform: translateY(-1px);
+    }
+  }
+  
+  // Tipos - Variante Outline
+  &--primario.botaoCustomizado--outline {
+    background: transparent;
+    color: var(--cor-primaria);
+    border: 2px solid var(--cor-primaria);
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-primaria);
+      color: white;
+    }
+  }
+  
+  &--secundario.botaoCustomizado--outline {
+    background: transparent;
+    color: var(--cor-secundaria);
+    border: 2px solid var(--cor-secundaria);
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-secundaria);
+      color: white;
+    }
+  }
+  
+  &--sucesso.botaoCustomizado--outline {
+    background: transparent;
+    color: var(--cor-sucesso);
+    border: 2px solid var(--cor-sucesso);
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-sucesso);
+      color: white;
+    }
+  }
+  
+  &--erro.botaoCustomizado--outline {
+    background: transparent;
+    color: var(--cor-erro);
+    border: 2px solid var(--cor-erro);
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-erro);
+      color: white;
+    }
+  }
+  
+  // Tipos - Variante Ghost
+  &--primario.botaoCustomizado--ghost {
+    background: transparent;
+    color: var(--cor-primaria);
+    border: 2px solid transparent;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-primaria-claro);
+    }
+  }
+  
+  &--secundario.botaoCustomizado--ghost {
+    background: transparent;
+    color: var(--cor-secundaria);
+    border: 2px solid transparent;
+    
+    &:hover:not(:disabled) {
+      background: var(--cor-secundaria-claro);
+    }
+  }
+  
+  // Estados
+  &--desabilitado {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  
+  &--carregando {
+    cursor: wait;
+    
+    .botaoCustomizado__texto {
+      opacity: 0.7;
+    }
+  }
+  
+  // Elementos internos
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  &__icone {
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+  }
+  
+  &__texto {
+    display: inline-block;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

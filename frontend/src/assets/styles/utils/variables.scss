@@ -1,0 +1,55 @@
+// Variáveis de cores principais
+$cor-primaria: #1976d2;
+$cor-primaria-escura: #115293;
+$cor-primaria-claro: #63a4ff;
+$cor-secundaria: #ff9800;
+$cor-secundaria-escura: #c66900;
+$cor-secundaria-claro: #ffc947;
+$cor-sucesso: #43a047;
+$cor-sucesso-claro: #b9f6ca;
+$cor-sucesso-escura: #00701a;
+$cor-erro: #e53935;
+$cor-erro-claro: #ffcdd2;
+$cor-erro-escura: #b71c1c;
+$cor-alerta: #fbc02d;
+$cor-alerta-claro: #fff9c4;
+$cor-alerta-escura: #c49000;
+$cor-info: #0288d1;
+$cor-info-claro: #b3e5fc;
+$cor-info-escura: #005b9f;
+$cor-borda: #e0e0e0;
+$cor-fundo: #f5f6fa;
+$cor-fundo-secundario: #ffffff;
+$cor-fundo-hover: #f0f4ff;
+$cor-texto: #222;
+$cor-texto-secundario: #666;
+$cor-texto-claro: #aaa;
+
+// Exportando para uso como variáveis CSS
+:root {
+  --cor-primaria: #1976d2;
+  --cor-primaria-escura: #115293;
+  --cor-primaria-claro: #63a4ff;
+  --cor-secundaria: #ff9800;
+  --cor-secundaria-escura: #c66900;
+  --cor-secundaria-claro: #ffc947;
+  --cor-sucesso: #43a047;
+  --cor-sucesso-claro: #b9f6ca;
+  --cor-sucesso-escura: #00701a;
+  --cor-erro: #e53935;
+  --cor-erro-claro: #ffcdd2;
+  --cor-erro-escura: #b71c1c;
+  --cor-alerta: #fbc02d;
+  --cor-alerta-claro: #fff9c4;
+  --cor-alerta-escura: #c49000;
+  --cor-info: #0288d1;
+  --cor-info-claro: #b3e5fc;
+  --cor-info-escura: #005b9f;
+  --cor-borda: #e0e0e0;
+  --cor-fundo: #f5f6fa;
+  --cor-fundo-secundario: #ffffff;
+  --cor-fundo-hover: #f0f4ff;
+  --cor-texto: #222;
+  --cor-texto-secundario: #666;
+  --cor-texto-claro: #aaa;
+}

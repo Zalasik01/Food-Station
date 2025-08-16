@@ -1,0 +1,36 @@
+// Estilos da página Funcionários
+.funcionarios {
+  padding: 2rem;
+  
+  &__cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+    .titulo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--cor-texto-primario);
+    }
+  }
+  
+  &__filtros {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  &__conteudo {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+}

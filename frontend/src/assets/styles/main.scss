@@ -1,0 +1,25 @@
+// Importações principais
+@import './utils/variables';
+@import './utils/mixins';
+@import './utils/functions';
+
+// Base styles
+@import './base/reset';
+@import './base/typography';
+@import './base/global';
+
+// Components styles
+@import './components/botaoCustomizado';
+@import './components/tabelaCustomizada';
+@import './components/cardCustomizado';
+@import './components/formularioCustomizado';
+@import './components/modalCustomizado';
+@import './components/cabecalho';
+@import './components/barraLateral';
+@import './components/rodape';
+
+// Pages styles - agora importados diretamente das pastas das páginas
+// Os estilos são importados automaticamente pelos componentes
+
+// PrimeReact theme customizations
+@import './base/primeTheme';

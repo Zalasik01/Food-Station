@@ -1,0 +1,1 @@
+update usuario set nome = 'Nicolas Zalasik' where id = 1;

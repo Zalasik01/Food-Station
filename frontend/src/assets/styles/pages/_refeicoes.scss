@@ -1,0 +1,52 @@
+// Estilos da página Refeições
+.refeicoes {
+  padding: 2rem;
+  
+  &__cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+    .titulo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--cor-texto-primario);
+    }
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  &__card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+  
+  &__status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    
+    &--ativo {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    &--inativo {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+}
