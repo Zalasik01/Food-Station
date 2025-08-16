@@ -1,6 +1,6 @@
 # Configuração do Banco de Dados RDS AWS
 
-Este documento explica como configurar o Amazon RDS para o projeto Food Status da Autos360.
+Este documento explica como configurar o Amazon RDS para o projeto Food Station da Autos360.
 
 ## 📋 Pré-requisitos
 

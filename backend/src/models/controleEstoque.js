@@ -17,7 +17,7 @@ const listarEntradasPorProduto = async (id_produto) => {
      FROM controle_estoque ce 
      LEFT JOIN usuario u ON ce.id_usuario = u.id 
      WHERE ce.id_produto = $1 AND ce.deletado = false 
-     ORDER BY ce.data_compra DESC`,
+     ORDER BY ce.criado_em DESC`,
     [id_produto]
   );
   return result.rows;

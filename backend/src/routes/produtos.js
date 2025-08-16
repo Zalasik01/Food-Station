@@ -9,7 +9,7 @@ router.put('/:id', async (req, res) => {
     if (!nome || valor == null || quantidade_estoque == null) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, valor, quantidade_estoque.' });
     }
-    const produtoAtualizado = await produtoModel.editarProduto({ id, nome, valor, quantidade_estoque, estoque_minimo, ativo });
+    const produtoAtualizado = await produtoModel.editarProduto({ id, nome, valor, quantidade_estoque, estoque_minimo, quantidade: 0, ativo });
     if (!produtoAtualizado) {
       return res.status(404).json({ error: 'Produto não encontrado.' });
     }
@@ -47,10 +47,30 @@ router.post('/', async (req, res) => {
     if (!nome || valor == null || quantidade_estoque == null) {
       return res.status(400).json({ error: 'Campos obrigatórios: nome, valor, quantidade_estoque.' });
     }
-    const novoProduto = await produtoModel.criarProduto({ nome, valor, quantidade_estoque, estoque_minimo });
+    const novoProduto = await produtoModel.criarProduto({ nome, valor, quantidade_estoque, estoque_minimo, quantidade: 0 });
     res.status(201).json(novoProduto);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao cadastrar produto.' });
+  }
+});
+
+// Nova rota para atualizar estoque
+router.post('/:id/atualizar-estoque', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantidade_caixas, quantidade_por_caixa } = req.body;
+    
+    if (!quantidade_caixas || !quantidade_por_caixa || quantidade_caixas <= 0 || quantidade_por_caixa <= 0) {
+      return res.status(400).json({ error: 'Quantidade de caixas e quantidade por caixa devem ser maiores que zero.' });
+    }
+    
+    const resultado = await produtoModel.atualizarEstoque({ id, quantidade_caixas, quantidade_por_caixa });
+    res.json({
+      produto: resultado.produto,
+      movimentacao: resultado.movimentacao
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Erro ao atualizar estoque.' });
   }
 });
 

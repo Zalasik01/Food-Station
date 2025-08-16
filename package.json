@@ -1,7 +1,7 @@
 {
   "name": "food-status-autos360",
   "version": "1.0.0",
-  "description": "Sistema de Food Status para Autos360",
+  "description": "Sistema de Food Station para Autos360",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",

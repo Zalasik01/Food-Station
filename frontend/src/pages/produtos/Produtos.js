@@ -104,11 +104,13 @@ const Produtos = () => {
                   <th><div style={{height:'18px',background:'rgba(0,0,0,0.08)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></th>
                   <th><div style={{height:'18px',background:'rgba(0,0,0,0.08)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></th>
                   <th><div style={{height:'18px',background:'rgba(0,0,0,0.08)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></th>
+                  <th><div style={{height:'18px',background:'rgba(0,0,0,0.08)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></th>
                 </tr>
               </thead>
               <tbody>
                 {[...Array(5)].map((_,i) => (
                   <tr key={i}>
+                    <td><div style={{height:'16px',background:'rgba(0,0,0,0.12)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></td>
                     <td><div style={{height:'16px',background:'rgba(0,0,0,0.12)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></td>
                     <td><div style={{height:'16px',background:'rgba(0,0,0,0.12)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></td>
                     <td><div style={{height:'16px',background:'rgba(0,0,0,0.12)',borderRadius:'4px',animation:'skeleton 1.2s infinite linear alternate'}}></div></td>
@@ -136,12 +138,15 @@ const Produtos = () => {
                   <th onClick={() => handleSort('quantidade_estoque')} className="produtos__th-sortable">Quantidade em estoque {sortBy === 'quantidade_estoque' && (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginLeft:'4px',transform:sortDir==='asc'?"rotate(180deg)":"none"}}><path d="M6 9l6 6 6-6"/></svg>
                   )}</th>
+                  <th onClick={() => handleSort('estoque_minimo')} className="produtos__th-sortable">Estoque Mínimo {sortBy === 'estoque_minimo' && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginLeft:'4px',transform:sortDir==='asc'?"rotate(180deg)":"none"}}><path d="M6 9l6 6 6-6"/></svg>
+                  )}</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {produtosFiltrados.length === 0 ? (
-                  <tr><td colSpan={5}>Nenhum produto cadastrado.</td></tr>
+                  <tr><td colSpan={6}>Nenhum produto cadastrado.</td></tr>
                 ) : (
                   produtosFiltrados.map(produto => (
                     <tr
@@ -174,6 +179,7 @@ const Produtos = () => {
                       </td>
                       <td>{produto.valor ? `R$ ${Number(String(produto.valor).replace(',','.')).toFixed(2)}` : '-'}</td>
                       <td>{produto.quantidade_estoque ?? '-'}</td>
+                      <td>{produto.estoque_minimo ?? '-'}</td>
                       <td>
                         <button className="produtos__edit-btn" title="Editar" onClick={e => {e.stopPropagation();navigate(`/editar-produto/${produto.id}`);}}>
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>

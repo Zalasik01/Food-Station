@@ -1,4 +1,4 @@
-# Food Status - Autos360
+# Food Station - Autos360
 
 Sistema de gerenciamento de status de alimentação para a empresa Autos360.
 

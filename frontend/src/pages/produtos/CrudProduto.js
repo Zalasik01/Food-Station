@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Menu from '../../components/Menu/Menu';
@@ -34,7 +33,13 @@ const CrudProduto = () => {
   const nomeUsuario = usuario.nome || 'Usuário';
   const isAdmin = usuario.administrador === true || usuario.administrador === "true";
 
-  const [form, setForm] = useState({ nome: '', preco: '', quantidade_estoque: '', estoque_minimo: '10', ativo: true });
+  const [form, setForm] = useState({ 
+    nome: '', 
+    preco: '', 
+    quantidade_estoque: '', 
+    estoque_minimo: '10',
+    ativo: true 
+  });
   const [originalForm, setOriginalForm] = useState(null);
   const [editMode, setEditMode] = useState(!!id);
   const [msg, setMsg] = useState('');
@@ -42,6 +47,72 @@ const CrudProduto = () => {
   const [estoqueModalOpen, setEstoqueModalOpen] = useState(false);
   const [entradasEstoque, setEntradasEstoque] = useState([]);
   const [editMovimentacao, setEditMovimentacao] = useState(null);
+  const [estoqueCaixas, setEstoqueCaixas] = useState('1');
+  const [estoquePorCaixa, setEstoquePorCaixa] = useState('1');
+
+  // Calcular quantidade baseada no fator de conversão
+  const calcularQuantidade = () => {
+    const caixas = parseInt(form.quantidade_caixas) || 0;
+    const porCaixa = parseInt(form.quantidade_por_caixa) || 1;
+    return caixas * porCaixa;
+  };
+
+  // Calcular quantidade para adição de estoque
+  const calcularQuantidadeEstoque = () => {
+    const caixas = parseInt(estoqueCaixas) || 0;
+    const porCaixa = parseInt(estoquePorCaixa) || 1;
+    return caixas * porCaixa;
+  };
+
+  // Adicionar estoque ao produto
+  const handleAdicionarEstoque = async () => {
+    if (!estoqueCaixas || !estoquePorCaixa || parseInt(estoqueCaixas) <= 0 || parseInt(estoquePorCaixa) <= 0) {
+      showToast('Informe valores válidos para caixas e quantidade por caixa', 'erro');
+      return;
+    }
+
+    // Calcular quantidade antes da requisição para evitar problemas de estado
+    const quantidadeCalculada = parseInt(estoqueCaixas) * parseInt(estoquePorCaixa);
+
+    try {
+      setLoading(true);
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const res = await fetch(`${apiUrl}/produtos/${id}/atualizar-estoque`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quantidade_caixas: parseInt(estoqueCaixas),
+          quantidade_por_caixa: parseInt(estoquePorCaixa)
+        })
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+        // Atualizar o estoque atual no formulário
+        setForm(prev => ({
+          ...prev,
+          quantidade_estoque: String(result.produto.quantidade_estoque)
+        }));
+        
+        // Adicionar a nova movimentação à lista local
+        if (result.movimentacao) {
+          setEntradasEstoque(prev => [result.movimentacao, ...prev]);
+        }
+        
+        // Limpar os campos
+        setEstoqueCaixas('1');
+        setEstoquePorCaixa('1');
+        showToast(`Estoque atualizado! Adicionado: ${quantidadeCalculada} unidades`, 'sucesso');
+      } else {
+        const errorData = await res.json();
+        showToast(errorData.error || 'Erro ao atualizar estoque', 'erro');
+      }
+    } catch (error) {
+      showToast('Erro ao atualizar estoque', 'erro');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Excluir movimentação de estoque
   const handleExcluirMovimentacao = async (idMovimentacao) => {
@@ -171,10 +242,14 @@ const CrudProduto = () => {
       });
       if (res.ok) {
         showToast(id ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!', 'sucesso');
-        if (!id) setForm({ nome: '', preco: '', quantidade_estoque: '', estoque_minimo: '10', ativo: true });
-        setTimeout(() => {
-          navigate('/produtos');
-        }, 1500);
+        if (!id) setForm({ 
+          nome: '', 
+          preco: '', 
+          quantidade_estoque: '', 
+          estoque_minimo: '10',
+          ativo: true 
+        });
+        // Removido navigate('/produtos')
       } else {
         showToast('Erro ao salvar produto.', 'erro');
       }
@@ -298,54 +373,74 @@ const CrudProduto = () => {
                   />
                 </div>
               </div>
-
-              <div className="crud-produto__actions">
-                <button 
-                  type="button" 
-                  className="crud-produto__btn-cancelar"
-                  onClick={() => navigate('/produtos')}
-                  disabled={loading}
-                >
-                  Cancelar
-                </button>
-                <button 
-                  type="submit" 
-                  className="crud-produto__btn-salvar"
-                  disabled={loading}
-                >
-                  {loading ? 'Salvando...' : (editMode ? 'Atualizar' : 'Cadastrar')}
-                </button>
-              </div>
             </form>
           </div>
+
+          {/* Seção Adicionar Estoque - Apenas no modo edição */}
+          {editMode && (
+            <div className="crud-produto__card">
+              <h3 className="crud-produto__bloco-titulo">Adicionar Estoque</h3>
+              <div className="crud-produto__fields-row">
+                <div className="crud-produto__field">
+                  <label htmlFor="estoque_caixas" className="crud-produto__label">Quantidade de Caixas</label>
+                  <input 
+                    type="number" 
+                    id="estoque_caixas" 
+                    value={estoqueCaixas} 
+                    onChange={(e) => setEstoqueCaixas(e.target.value)}
+                    min="1" 
+                    placeholder="Ex: 5" 
+                    className="crud-produto__input"
+                  />
+                </div>
+
+                <div className="crud-produto__field">
+                  <label htmlFor="estoque_por_caixa" className="crud-produto__label">Quantidade por Caixa</label>
+                  <input 
+                    type="number" 
+                    id="estoque_por_caixa" 
+                    value={estoquePorCaixa} 
+                    onChange={(e) => setEstoquePorCaixa(e.target.value)}
+                    min="1" 
+                    placeholder="Ex: 12" 
+                    className="crud-produto__input"
+                  />
+                </div>
+
+                <div className="crud-produto__field">
+                  <label className="crud-produto__label">Total a Adicionar</label>
+                  <div className="crud-produto__total-display">
+                    <strong>{calcularQuantidadeEstoque()} unidades</strong>
+                    <small>{estoqueCaixas} caixas × {estoquePorCaixa} unidades por caixa</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Bloco Controle de Estoque */}
           <div className="crud-produto__card">
             <h3 className="crud-produto__bloco-titulo">Controle de Estoque</h3>
-            <button className="crud-produto__btn-registrar" onClick={() => {
-              setEditMovimentacao(null);
-              setEstoqueModalOpen(true);
-            }}>
-              Registrar produto
-            </button>
             <table className="crud-produto__estoque-tabela">
               <thead>
                 <tr>
                   <th>Data</th>
-                  <th>Quantidade</th>
-                  <th>Usuário</th>
+                  <th>Antes</th>
+                  <th>Depois</th>
+                  <th>Adicionado</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {entradasEstoque.length === 0 ? (
-                  <tr><td colSpan={5}>Nenhuma entrada registrada.</td></tr>
+                  <tr><td colSpan={5}>Nenhuma movimentação registrada.</td></tr>
                 ) : (
                   entradasEstoque.map(e => (
                     <tr key={e.id}>
                       <td>{e.data_compra ? new Date(e.data_compra).toLocaleDateString() : '-'}</td>
-                      <td>{e.quantidade}</td>
-                      <td>{e.usuario_nome || 'N/A'}</td>
+                      <td>{e.quantidade_antes || 0}</td>
+                      <td>{e.quantidade_depois || 0}</td>
+                      <td>{e.quantidade_adicionada || e.quantidade || 0}</td>
                       <td>
                         <button 
                           className="crud-produto__btn-estoque-edit" 
@@ -364,28 +459,43 @@ const CrudProduto = () => {
                 )}
               </tbody>
             </table>
-            <ControleEstoqueModal
-              open={estoqueModalOpen}
-              onClose={() => {
-                setEstoqueModalOpen(false);
-                setEditMovimentacao(null);
-              }}
-              onSave={() => {
-                setEstoqueModalOpen(false);
-                setEditMovimentacao(null);
-              }}
-              idProduto={id}
-              editMovimentacao={editMovimentacao}
-              atualizarMovimentacaoLocal={mov => {
-                setEntradasEstoque(entradasEstoque.map(e => e.id === mov.id ? mov : e));
-              }}
-              adicionarMovimentacaoLocal={mov => {
-                setEntradasEstoque([mov, ...entradasEstoque]);
-              }}
-            />
           </div>
           </div>
         )}
+
+        {/* Footer com botões */}
+        <footer className="crud-produto__footer">
+          <div className="crud-produto__footer-actions">
+            <button 
+              type="button" 
+              className="crud-produto__btn-cancelar"
+              onClick={() => navigate('/produtos')}
+              disabled={loading}
+            >
+              Cancelar
+            </button>
+            
+            {editMode && (
+              <button 
+                type="button" 
+                className="crud-produto__btn-adicionar-estoque"
+                onClick={handleAdicionarEstoque}
+                disabled={loading || !estoqueCaixas || !estoquePorCaixa || parseInt(estoqueCaixas) <= 0 || parseInt(estoquePorCaixa) <= 0}
+              >
+                {loading ? 'Adicionando...' : 'Adicionar Estoque'}
+              </button>
+            )}
+            
+            <button 
+              type="button" 
+              className="crud-produto__btn-salvar"
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? 'Salvando...' : (editMode ? 'Atualizar' : 'Salvar')}
+            </button>
+          </div>
+        </footer>
 
       </main>
       
@@ -400,6 +510,14 @@ const CrudProduto = () => {
         draggable
         pauseOnHover
         theme="light"
+        toastClassName="crud-produto__toast"
+        onClick={e => {
+          // Copia o texto da notificação ao clicar
+          const text = e.target.innerText || e.target.textContent;
+          if (text) {
+            navigator.clipboard.writeText(text);
+          }
+        }}
       />
     </div>
   );

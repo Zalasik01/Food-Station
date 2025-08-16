@@ -7,7 +7,92 @@
   margin-left: 1rem;
   cursor: pointer;
   transition: color 0.2s;
-// ...existing code...
+}
+// Footer com botões
+.crud-produto__footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.07);
+  z-index: 9999;
+  padding: 1.2rem 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .crud-produto__footer-actions {
+    display: flex;
+    gap: 1.2rem;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: flex-end;
+    margin-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .crud-produto__footer {
+    padding: 1rem 0;
+    .crud-produto__footer-actions {
+      flex-direction: column;
+      gap: 0.7rem;
+      align-items: stretch;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// Botão adicionar estoque no footer
+.crud-produto__btn-adicionar-estoque {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #218838;
+  }
+
+  &:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+  }
+}
+
+// Display do total a adicionar
+.crud-produto__total-display {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+
+  strong {
+    display: block;
+    color: #28a745;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  small {
+    color: #666;
+    font-size: 0.875rem;
+  }
+}
+
+// Ajustar o conteúdo principal para não sobrepor o footer
+.crud-produto__conteudo {
+  padding-bottom: 8rem; // Espaço extra para não sobrepor o footer + 20px
+}
+
 .crud-produto__toast button:hover {
   color: #ef4444;
 }
@@ -32,6 +117,12 @@
   background: #fff;
   color: #374151;
   animation: slideInRight 0.3s ease-out;
+  cursor: pointer;
+  user-select: text;
+
+  &:active {
+    background: #e0e7ff;
+  }
 }
 
 @keyframes slideInRight {
@@ -46,7 +137,7 @@
 }
 
 @media (max-width: 600px) {
-  .crud-produto__toast {
+  .crud_produto__toast {
     min-width: 200px;
     max-width: 95vw;
     font-size: 0.98rem;
@@ -56,7 +147,6 @@
     border-radius: 8px;
     gap: 0.8rem;
   }
-}
 }
 .crud-produto__toast--sucesso {
   border-color: #10b981;
@@ -463,4 +553,30 @@
       border: 1px solid #fca5a5;
     }
   }
+
+  // Estilos para seção fator de conversão
+  &__section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+  }
+
+  &__section-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  &__input--readonly {
+    background-color: #f5f5f5 !important;
+    cursor: not-allowed !important;
+    color: #6b7280;
+  }
+}
+
+.crud-produto__card:last-child {
+  margin-bottom: 7rem;
 }

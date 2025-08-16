@@ -64,7 +64,7 @@ const Login = () => {
       <div className="login__container">
         <div className="login__cabecalho">
           <div className="login__logo">
-            <h1>Food Status</h1>
+            <h1>Food Station</h1>
             <span>Autos360</span>
           </div>
           <p className="login__subtitulo">
@@ -158,7 +158,7 @@ const Login = () => {
 
       <div className="login__imagem">
         <div className="login__imagemOverlay">
-          <h2>Bem-vindo ao Food Status</h2>
+          <h2>Bem-vindo ao Food Station</h2>
           <p>
             Gerencie a alimentação da sua empresa de forma simples e eficiente.
             Controle refeições, funcionários e tenha relatórios completos em tempo real.
