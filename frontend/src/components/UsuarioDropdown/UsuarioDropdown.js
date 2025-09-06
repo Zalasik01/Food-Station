@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
 import './usuarioDropdown.scss';
 
-const UsuarioDropdown = ({ nome, id, email, onLogout }) => {
+const UsuarioDropdown = ({ nome, email, onLogout }) => {
   const [open, setOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
-  console.log('UsuarioDropdown props:', { nome, id, email }); // Debug
 
   return (
     <div className="usuario-dropdown">
@@ -14,11 +12,11 @@ const UsuarioDropdown = ({ nome, id, email, onLogout }) => {
         className="usuario-dropdown__trigger"
         onClick={() => setOpen(!open)}
       >
-        {nome} ({id})
+        {nome}
         <span className="usuario-dropdown__arrow">▼</span>
       </button>
       {open && (
-        <div className="usuario-dropdown__menu">
+        <div className="usuario-dropdown__menu usuario-dropdown__menu--fade">
           <button
             className="usuario-dropdown__item"
             onClick={() => {
@@ -37,7 +35,7 @@ const UsuarioDropdown = ({ nome, id, email, onLogout }) => {
         <EditProfileModal
           isOpen={showEditModal}
           onClose={() => setShowEditModal(false)}
-          userProps={{ nome, id, email }} // Passar as props do usuário
+          userProps={{ nome, email }}
         />
       )}
     </div>

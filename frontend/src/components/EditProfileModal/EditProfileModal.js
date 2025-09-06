@@ -5,7 +5,8 @@ const EditProfileModal = ({ isOpen, onClose, userProps }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    id: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -13,12 +14,12 @@ const EditProfileModal = ({ isOpen, onClose, userProps }) => {
   // Buscar dados do usuário ao abrir o modal
   useEffect(() => {
     if (isOpen) {
-      // Usar props passadas diretamente se disponíveis
       if (userProps && userProps.nome && userProps.email) {
         setFormData({
           name: userProps.nome,
           email: userProps.email,
-          password: ''
+          password: '',
+          id: userProps.id || ''
         });
       } else {
         loadUserData();
@@ -66,9 +67,37 @@ const EditProfileModal = ({ isOpen, onClose, userProps }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    // ...salvar dados no backend...
-    setLoading(false);
-    onClose();
+    try {
+      const token = localStorage.getItem('token');
+      const body = {
+        nome: formData.name,
+        senha: formData.password ? formData.password : undefined
+      };
+      const response = await fetch(`/api/usuarios/${formData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+      if (!response.ok) {
+        // Tenta converter para JSON, mas se falhar, mostra erro genérico
+        let errorMsg = 'Erro ao atualizar perfil';
+        try {
+          const resData = await response.json();
+          errorMsg = resData.error || errorMsg;
+        } catch {
+          errorMsg = 'Erro inesperado do servidor';
+        }
+        throw new Error(errorMsg);
+      }
+      onClose();
+    } catch (err) {
+      setError(err.message || 'Erro ao atualizar perfil');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -81,7 +110,6 @@ const EditProfileModal = ({ isOpen, onClose, userProps }) => {
           <button onClick={onClose} className="edit-profile-modal__close">×</button>
         </div>
         {error && <div className="edit-profile-modal__error">{error}</div>}
-        
         <form onSubmit={handleSubmit}>
           <label>
             Nome

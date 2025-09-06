@@ -33,6 +33,21 @@
   z-index: 10;
 }
 
+.usuario-dropdown__menu--fade {
+  animation: fadeInDropdown 0.2s ease;
+}
+
+@keyframes fadeInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .usuario-dropdown__item {
   background: none;
   border: none;
